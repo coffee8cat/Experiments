@@ -52,13 +52,18 @@ int main()
     int *matrix_ptr = make_matrix(size_x, size_y);
     print_matrix((char *)matrix_ptr, size_x, size_y);
 
-    printf("----------\n");
+    printf("--------------------\n");
 
     matrix_ptr = make_triangle_matrix(size_x, size_y);
     print_matrix((char *)matrix_ptr, size_x, size_y);
 
 
-    printf("----------\n");
-    make_and_draw_rhombus(11);
+    printf("--------------------\n");
+    draw_rhombus(11);
+
+    printf("---------------------\n");
+    draw_circle(10);
+    /*printf("--------------------\n");
+    draw_circle(40);*/
     return EXIT_SUCCESS;
 }

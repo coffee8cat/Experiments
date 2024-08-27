@@ -15,6 +15,7 @@ int *make_matrix (size_t size_x, size_t size_y);
 
 int *make_triangle_matrix(size_t size_x, size_t size_y);
 
-void make_and_draw_rhombus(size_t rhomb_size);
+void draw_rhombus(size_t rhomb_size);
 
+void draw_circle(double R);
 #endif //_MATRIX_OPERATIONS_H__

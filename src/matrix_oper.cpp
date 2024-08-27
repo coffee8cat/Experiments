@@ -78,21 +78,95 @@ int *make_triangle_matrix(size_t size_x, size_t size_y)
     return matrix;
 }
 
-void make_and_draw_rhombus(size_t rhomb_size)
+void draw_rhombus(size_t rhomb_size)
 {
-    int *matrix = (int *)calloc(rhomb_size * rhomb_size, sizeof(int));
-    size_t y = rhomb_size / 2;
-    printf("%d\n", y);
-    for(size_t x = 0; x <= rhomb_size / 2; x++)
+    int n_left = rhomb_size / 2;
+    int n_right = 0;
+    while(n_left >= 0)
     {
-        *(matrix + x * rhomb_size + (y + x)) = 1;
-        *(matrix + x * rhomb_size + (y - x)) = 1;
-    }
-    for(size_t x = 0; x <= rhomb_size / 2; x++)
-    {
-        *(matrix + (x + rhomb_size / 2) * rhomb_size + rhomb_size - x - 1) = 1;
-        *(matrix + (x + rhomb_size / 2) * rhomb_size + x) = 1;
+        for(size_t i = 0; i < n_left; i++)
+        {
+            printf(" ");
+        }
+        printf("%d", 1);
+        for(size_t i = 0; i < n_right; i++)
+        {
+            printf("  ");
+        }
+        if(n_right > 0)
+        {
+            printf("%d", 1);
+        }
+
+        printf("\n");
+        n_left--;
+        n_right++;
     }
 
-    print_matrix((char *)matrix, rhomb_size, rhomb_size);
+    n_left = 1;
+    n_right = rhomb_size / 2 - 1;
+    while(n_left <= rhomb_size / 2)
+    {
+        for(size_t i = 0; i < n_left; i++)
+        {
+            printf(" ");
+        }
+
+        printf("%d", 1);
+        for(size_t i = 0; i < n_right; i++)
+        {
+            printf("  ");
+        }
+        if(n_right > 0)
+        {
+            printf("%d", 1);
+        }
+
+        printf("\n");
+        n_left++;
+        n_right--;
+    }
+}
+
+void draw_circle(double R)
+{
+    int n_left = 1, n_right=1;
+    double step = 3 / R;
+    double x = 1;
+    while(x < 2.5)
+    {
+        n_left = round(R / (x * x * sqrt(x)));
+        n_right = R - n_left;
+        for(size_t k = 0; k < n_left; k++)
+        {
+            printf(" ");
+        }
+        printf("%d", 1);
+        for(size_t k = 0; k < n_right; k++)
+        {
+            printf("  ");
+        }
+        printf("%d\n", 1);
+
+        x = x + step;
+    }
+
+    x = 2.5;
+    while(x > 0.8)
+    {
+        n_left = round(R / (x * x * sqrt(x)));
+        n_right = R - n_left;
+        for(size_t k = 0; k < n_left; k++)
+        {
+            printf(" ");
+        }
+        printf("%d", 1);
+        for(size_t k = 0; k < n_right; k++)
+        {
+            printf("  ");
+        }
+        printf("%d\n", 1);
+
+        x = x - step;
+    }
 }
