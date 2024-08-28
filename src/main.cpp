@@ -9,31 +9,32 @@
 int main()
 {
     FILE *fp_source = fopen("data\\data1.txt", "rb");
-    FILE *fp_target = fopen("compressed_data\\data1_compressed.txt", "w");
+    FILE *fp_target = fopen("compressed_data\\data1_compressed.txt", "wb");
 
-    size_t mem_size = RLE_compressor(fp_source, fp_target);
+    RLE_compressor(fp_source, fp_target);
 
     fclose(fp_source);
     fclose(fp_target);
 
     FILE *fp_source1 = fopen("compressed_data\\data1_compressed.txt", "rb");
-    FILE *fp_target1 = fopen("data\\data2.txt", "w");
-    RLE_decompressor(fp_source1, fp_target1, mem_size);
+    FILE *fp_target1 = fopen("data\\data2.txt", "wb");
+
+    RLE_decompressor(fp_source1, fp_target1);
 
     fclose(fp_source1);
     fclose(fp_target1);
 ///////////////////////////////////////////////////////////////////////////////////////////////////
     fp_source = fopen("data\\cat.jpg", "rb");
-    fp_target = fopen("compressed_data\\cat_compr.txt", "w");
+    fp_target = fopen("compressed_data\\cat_compr.jpg", "wb");
 
-    mem_size = RLE_compressor(fp_source, fp_target);
+    RLE_compressor(fp_source, fp_target);
 
     fclose(fp_source);
     fclose(fp_target);
 
-    fp_source1 = fopen("compressed_data\\cat_compr.txt", "rb");
-    fp_target1 = fopen("data\\cat1.jpg", "w");
-    RLE_decompressor(fp_source1, fp_target1, mem_size);
+    fp_source1 = fopen("compressed_data\\cat_compr.jpg", "rb");
+    fp_target1 = fopen("data\\cat1.jpg", "wb");
+    RLE_decompressor(fp_source1, fp_target1);
 
     fclose(fp_source1);
     fclose(fp_target1);

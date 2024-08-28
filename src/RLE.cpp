@@ -8,56 +8,96 @@ size_t RLE_compressor(FILE *fp_source, FILE *fp_target)
     assert(fp_source);
     assert(fp_target);
 
-    fseek(fp_source, 0, SEEK_END);
-    const size_t mem_size = ftell(fp_source);
-    rewind(fp_source);
-
-    char *input = (char*)calloc(mem_size, sizeof(char));
-    fread(input, sizeof(char), mem_size,fp_source);
-
     printf("got here\n");
 
-    char ch_prev = input[0];
-    char ch_curr = ' ';
-    size_t counter = 1;
+    char ch_prev = ' ';
+    fread((void*)&ch_prev, sizeof(char), 1, fp_source);
 
-    for(size_t i = 1; i < mem_size; i++)
+    char ch_curr = ' ';
+    char counter = 1;
+    char single_chars[128] = {};
+    bool single = false;
+
+    while(fread((void*)&ch_curr, sizeof(char), 1, fp_source) == 1)
     {
-        ch_curr = input[i];
         if(ch_curr == ch_prev)
         {
-            counter++;
+            if(single)
+            {
+                counter = counter * (-1);
+                fwrite((void*)&counter, sizeof(char), 1, fp_target);
+                for(char i = 0; i < counter; i++)
+                {
+                    fwrite((void*)&single_chars[i], sizeof(char), 1, fp_target);
+                }
+                counter = (char)1;
+                single = false;
+            }
+            else
+            {
+                counter++;
+                single = false;
+            }
         }
         else
         {
-            fprintf(fp_target, "%d%c%c", counter, '\0', ch_prev);
-            counter = 1;
+            if(single)
+            {
+                if(counter < 128)
+                {
+                    single_chars[counter] = ch_prev;
+                    counter++;
+                }
+                else
+                {
+                    counter = counter * (-1);
+                    fwrite((void*)&counter, sizeof(char), 1, fp_target);
+                    for(char i = 0; i < counter; i++)
+                    {
+                        fwrite((void*)&single_chars[i], sizeof(char), 1, fp_target);
+                    }
+                    counter = (char)1;
+                }
+            }
+            else
+            {
+                fwrite((void*)&counter, sizeof(char), 1, fp_target);
+                fwrite((void*)&ch_prev, sizeof(char), 1, fp_target);
+                counter = (char)1;
+                single = false;
+            }
         }
         ch_prev = ch_curr;
     }
-
-    //fprintf(fp_target, "%d%c", counter, ch_prev);
-
-    return mem_size;
 }
 
-void RLE_decompressor(FILE *fp_source, FILE *fp_target, size_t mem_size)
+void RLE_decompressor(FILE *fp_source, FILE *fp_target)
 {
-    char *output = (char*)calloc(mem_size, sizeof(char));
+    assert(fp_source);
+    assert(fp_target);
 
     size_t n_copies = 0;
     char ch = ' ';
-    size_t j = 0;
+    char counter = 0;
 
-    while((fscanf(fp_source, "%d", &n_copies) == 1) && (getc(fp_source) == '\0')
-           && (ch = getc(fp_source)) != EOF)
+    while(fread((void*)&counter, sizeof(char), 1, fp_source))
     {
-        for(size_t i = 0; i < n_copies; i++)
+        if(counter < 0)
         {
-            output[j] = ch;
-            j++;
+            for(char i = 0; i < abs(counter); i++)
+            {
+                fread((void*)&ch, sizeof(char), 1, fp_source);
+                fwrite((void*)&ch, sizeof(char), 1, fp_target);
+            }
         }
-    }
+        else
+        {
+            fread((void*)&ch, sizeof(char), 1, fp_source);
+            for(size_t i = 0; i < counter; i++)
+            {
+                fwrite((void*)&ch, sizeof(char), 1, fp_target);
+            }
+        }
 
-    fwrite(output, sizeof(char), mem_size, fp_target);
+    }
 }
