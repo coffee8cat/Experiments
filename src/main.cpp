@@ -4,41 +4,10 @@
 #include <time.h>
 
 #include "matrix_oper.h"
-#include "RLE.h"
 
 int main()
 {
-    FILE *fp_source = fopen("data\\data1.txt", "rb");
-    FILE *fp_target = fopen("compressed_data\\data1_compressed.txt", "wb");
-
-    RLE_compressor(fp_source, fp_target);
-
-    fclose(fp_source);
-    fclose(fp_target);
-
-    FILE *fp_source1 = fopen("compressed_data\\data1_compressed.txt", "rb");
-    FILE *fp_target1 = fopen("data\\data2.txt", "wb");
-
-    RLE_decompressor(fp_source1, fp_target1);
-
-    fclose(fp_source1);
-    fclose(fp_target1);
-///////////////////////////////////////////////////////////////////////////////////////////////////
-    fp_source = fopen("data\\cat.jpg", "rb");
-    fp_target = fopen("compressed_data\\cat_compr.jpg", "wb");
-
-    RLE_compressor(fp_source, fp_target);
-
-    fclose(fp_source);
-    fclose(fp_target);
-
-    fp_source1 = fopen("compressed_data\\cat_compr.jpg", "rb");
-    fp_target1 = fopen("data\\cat1.jpg", "wb");
-    RLE_decompressor(fp_source1, fp_target1);
-
-    fclose(fp_source1);
-    fclose(fp_target1);
-    /*srand(time(NULL));
+    srand(time(NULL));
 
     draw_rhombus(21);
     printf("---------------------\n");
@@ -113,7 +82,7 @@ int main()
     int * matrix_mult = multipy_matrix((int*)m1, (int*)m2, sizeof(m1)/sizeof(m1[0]), sizeof(m1[0])/sizeof(m1[0][0]),
                                  sizeof(m2)/sizeof(m2[0]), sizeof(m2[0])/sizeof(m2[0][0]));
 
-    print_matrix(matrix_mult, 2, 5);*/
+    print_matrix(matrix_mult, 2, 5);
 
     return EXIT_SUCCESS;
 }
